@@ -1,0 +1,10 @@
+@import "tailwindcss";
+/* global.css or your component CSS */
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* This hides the scrollbar */
+}
+
+::-webkit-scrollbar-thumb {
+  color: #7944ac;
+}
