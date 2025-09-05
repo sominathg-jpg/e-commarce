@@ -19,8 +19,8 @@ app.use("/api/product", productRoute);
 app.use("/api/review", reviewRoute);
 app.listen(process.env.PORT, () => {
   connectDb();
+
   console.log(
     `server is started on the port http://localhost:${process.env.PORT}`
   );
 });
- 

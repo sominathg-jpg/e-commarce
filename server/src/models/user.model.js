@@ -19,12 +19,12 @@ const userSchema = new Schema(
     },
     phone: {
       type: String,
-      required: true,
+
       trim: true,
     },
     address: {
       type: String,
-      required: true,
+
       trim: true,
     },
     avatar: {
