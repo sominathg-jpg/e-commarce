@@ -2,9 +2,79 @@ import Product from "../models/product.model.js";
 import cloudinary from "../config/cloudanary.js";
 import productModel from "../models/product.model.js";
 
-// Create Product
+// // Create Product
+// export const createProduct = async (req, res) => {
+//   try {
+//     const {
+//       name,
+//       price,
+//       oldPrice,
+//       stock,
+//       brand,
+//       category,
+//       colors,
+//       weight,
+//       material,
+//       dimensions,
+//       warranty,
+//       payment,
+//       description,
+//     } = req.body;
+
+//     const image = req.file;
+//     let imageUrls = [];
+
+//     if (image) {
+//       const uploadResponse = await cloudinary.uploader.upload(
+//         `data:${image.mimetype};base64,${image.buffer.toString("base64")}`,
+//         { folder: "image" }
+//       );
+//       imageUrls.push(uploadResponse.secure_url);
+//     }
+
+//     const newProduct = new Product({
+//       name,
+//       price,
+//       oldPrice,
+//       stock,
+//       brand,
+//       category,
+//       colors,
+//       weight,
+//       material,
+//       dimensions,
+//       warranty,
+//       payment,
+//       description,
+//       images: imageUrls,
+//     });
+
+//     const savedProduct = await newProduct.save();
+
+//     res.status(201).json({
+//       success: true,
+//       data: savedProduct,
+//       message: "Product created successfully",
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//       error: error.message,
+//     });
+//   }
+// };
+// import cloudinary from "../config/cloudinary.js"; // your Cloudinary config
+import multer from "multer";
+
+// Multer setup (store files in memory)
+const storage = multer.memoryStorage();
+export const upload = multer({ storage }); // use upload.array(...) in routes
+
+// Controller
 export const createProduct = async (req, res) => {
   try {
+    const product = req.file;
     const {
       name,
       price,
@@ -23,41 +93,15 @@ export const createProduct = async (req, res) => {
 
     let imageUrls = [];
 
-    // If images are uploaded, push to Cloudinary
-    if (req.files && req.files.length > 0) {
-      const uploadPromises = req.files.map((file) =>
-        cloudinary.uploader.upload_stream(
-          { folder: "products" },
-          (error, result) => {
-            if (error) {
-              console.error("Cloudinary upload error:", error);
-              throw new Error("Image upload failed");
-            }
-            return result.secure_url;
-          }
-        )
-      );
+    console.log(product);
 
-      // ⚠️ Since upload_stream uses streams, wrap in a Promise:
-      const streamUpload = (file) => {
-        return new Promise((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            { folder: "products" },
-            (error, result) => {
-              if (result) {
-                resolve(result.secure_url);
-              } else {
-                reject(error);
-              }
-            }
-          );
-          stream.end(file.buffer);
-        });
-      };
-
-      imageUrls = await Promise.all(
-        req.files.map((file) => streamUpload(file))
+    if (product) {
+      // Upload single image to Cloudinary
+      const result = await cloudinary.uploader.upload(
+        `data:${product.mimetype};base64,${product.buffer.toString("base64")}`,
+        { folder: "products" }
       );
+      imageUrls[imageUrls.length ] = result.secure_url;
     }
 
     const newProduct = new Product({
@@ -81,10 +125,11 @@ export const createProduct = async (req, res) => {
 
     res.status(201).json({
       success: true,
-      data: savedProduct,
+      // data: savedProduct,
       message: "Product created successfully",
     });
   } catch (error) {
+    console.error("Create Product Error:", error);
     res.status(500).json({
       success: false,
       message: "Server error",
@@ -92,7 +137,6 @@ export const createProduct = async (req, res) => {
     });
   }
 };
-
 // Update specific product fields
 export const updateProduct = async (req, res) => {
   try {

@@ -13,7 +13,7 @@ const router = Router();
 router.post("/add-product", upload.single("product"), createProduct);
 router.get("/getproducts", getProducts);
 router.get("/get-perticualar-product/:id", getProduct);
-router.patch("/update-product/:id", upload.single("product"), updateProduct);
+router.patch("/update-product/:id", upload.single("image"), updateProduct);
 router.delete("/delete-product/:id", deleteProduct);
 
 // in case if we want the order according to the user then here we will apply that

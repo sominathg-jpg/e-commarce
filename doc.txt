@@ -1,1 +1,8 @@
-http://localhost:3000/api/auth/register
+POST-http://localhost:3000/api/auth/register
+POST-http://localhost:3000/api/auth/login
+PATCH-http://localhost:3000/api/auth/update-profile/68be654c0d78d71df35a9d2f
+POST-http://localhost:3000/api/product/add-product
+GET-http://localhost:3000/api/product/get-perticualar-product/68bed5335dfd6c350940115f
+GET-http://localhost:3000/api/product/getproducts/
+DELETE-http://localhost:3000/api/product/delete-product/68bed5335dfd6c350940115f
+PATCH-http://localhost:3000/api/product/update-product/68bed8bf3e624808c38e39cc
