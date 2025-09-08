@@ -35,7 +35,6 @@ const userSchema = new Schema(
     password: {
       type: String,
       required: true,
-      select: false, // prevents sending password in queries by default
     },
     orders: [
       {

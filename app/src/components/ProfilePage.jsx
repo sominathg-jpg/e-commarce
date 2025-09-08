@@ -1,16 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCart";
-
-// Dummy Data
-const user = {
-  id: 1,
-  name: "John Doe",
-  email: "john.doe@example.com",
-  phone: "+1 234 567 890",
-  address: "123 Main Street, City, Country",
-  avatar: "https://i.pravatar.cc/150?img=12",
-};
+import { useAuthStore } from "../store/authStore";
 
 const favoriteProducts = [
   {
@@ -68,6 +59,8 @@ const orders = [
 ];
 
 const ProfilePage = () => {
+  const { user, logout } = useAuthStore();
+
   return (
     <div className="bg-gray-50 min-h-screen pt-30 ">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -75,7 +68,7 @@ const ProfilePage = () => {
         <div className="bg-white p-6 rounded-xl shadow-md">
           <div className="flex flex-col items-center text-center">
             <img
-              src={user.avatar}
+              src={user.profile}
               alt={user.name}
               className="w-24 h-24 rounded-full mb-4 object-cover"
             />
@@ -91,7 +84,10 @@ const ProfilePage = () => {
             >
               Edit Profile
             </Link>
-            <button className="w-full mt-5 block text-center cursor-pointer bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition">
+            <button
+              onClick={() => logout()}
+              className="w-full mt-5 block text-center cursor-pointer bg-red-600 text-white py-2 rounded-lg hover:bg-red-700 transition"
+            >
               Logout
             </button>
           </div>

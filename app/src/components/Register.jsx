@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
+import toast from "react-hot-toast";
 import {
-  Button,
   TextField,
   Typography,
   Container,
@@ -13,7 +13,9 @@ import {
   Paper,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-input": {
     height: "1.25rem",
@@ -25,47 +27,103 @@ const StyledTextField = styled(TextField)({
 });
 
 const Register = () => {
+  const navigate = useNavigate();
+
+  // Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    isCustomer: "yes",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle Submit
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      const res = await axios.post(
+        "http://localhost:3000/api/auth/register",
+        formData
+      );
+
+      console.log(res);
+      
+      if (res.data.success) {
+        toast.success("Registration successful!");
+        setTimeout(() => navigate("/login"), 1000);
+      } else {
+        toast.error(res.data.message || "Registration failed");
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex items-center justify-center pt-30">
       <Container maxWidth="sm" className="flex flex-col items-center m-20">
-        {/* Card */}
         <Paper className="w-full mx-auto p-6 rounded-lg bg-neutral-800 shadow-md">
           {/* Title */}
-          <Typography variant="h5" className="mb-4 text-center font-semibold ">
+          <Typography variant="h5" className="mb-4 text-center font-semibold">
             Register
           </Typography>
 
-          {/* Info Text */}
-          <Typography
-            variant="body2"
-            className="p-5 flex text-gray-400 text-xs"
-          >
+          {/* Info */}
+          <Typography variant="body2" className="p-5 text-gray-400 text-xs">
             Create an account to save your journey on any device and enjoy more
             features.
           </Typography>
 
           {/* Form */}
-          <Box component="form" className="space-y-3 gap-y-5 flex flex-col">
+          <Box
+            component="form"
+            className="space-y-3 gap-y-5 flex flex-col"
+            onSubmit={handleSubmit}
+          >
             <StyledTextField
               fullWidth
               label="Username"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+              required
               variant="outlined"
               InputLabelProps={{ shrink: true }}
             />
             <StyledTextField
               fullWidth
               label="Email address"
-              variant="outlined"
-              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               required
+              type="email"
+              variant="outlined"
               InputLabelProps={{ shrink: true }}
             />
             <StyledTextField
               fullWidth
               label="Password"
-              variant="outlined"
-              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
               required
+              type="password"
+              variant="outlined"
               InputLabelProps={{ shrink: true }}
             />
 
@@ -79,8 +137,9 @@ const Register = () => {
               </FormLabel>
               <RadioGroup
                 row
-                aria-label="customer"
-                name="row-radio-buttons-group"
+                name="isCustomer"
+                value={formData.isCustomer}
+                onChange={handleChange}
               >
                 <FormControlLabel
                   value="yes"
@@ -97,21 +156,19 @@ const Register = () => {
               </RadioGroup>
             </FormControl>
 
-            {/* Privacy Notice */}
-            <Typography variant="caption" className="text-gray-400 mt-2 block">
-              Your personal data will be used to support your experience
-              throughout this website and to manage access to your account.
-            </Typography>
-
             {/* Register Button */}
-            <button className="mt-3 bg-purple-500 hover:bg-purple-600  px-5 py-2 rounded-2xl text-white font-semibold">
-              Register
+            <button
+              type="submit"
+              disabled={loading}
+              className="mt-3 bg-purple-500 hover:bg-purple-600 px-5 py-2 rounded-2xl text-white font-semibold"
+            >
+              {loading ? "Registering..." : "Register"}
             </button>
           </Box>
+
           <div className="flex items-center justify-center px-10 py-4">
             <Link to={"/login"}>
-              {" "}
-              <button>Login</button>
+              <button className="text-purple-400 hover:underline">Login</button>
             </Link>
           </div>
         </Paper>

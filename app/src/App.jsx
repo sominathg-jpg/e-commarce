@@ -2,7 +2,7 @@ import Register from "./components/Register";
 import Header from "./components/Navbar";
 import Login from "./components/Login";
 import Home from "./components/Home";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import Footer from "./components/Footer";
 import NotFound from "./components/NotFound";
 import Contact from "./components/Contact";
@@ -13,25 +13,72 @@ import CartPage from "./components/CartPage";
 import ProfilePage from "./components/ProfilePage";
 import EditProfilePage from "./components/Editprofile";
 import AboutPage from "./components/AboutPage";
+import { Toaster } from "react-hot-toast";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { useAuthStore } from "./store/authStore";
 function App() {
+  const { isLogin } = useAuthStore(); // ✅ check auth state
+
   return (
     <>
-      <Header></Header>
+      <Header />
+
       <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/home" element={<Home />} />
+        {/* Public Routes (block if already logged in) */}
+        <Route
+          path="/"
+          element={!isLogin ? <Register /> : <Navigate to="/home" replace />}
+        />
+        <Route
+          path="/login"
+          element={!isLogin ? <Login /> : <Navigate to="/home" replace />}
+        />
+
+        {/* Always Public */}
         <Route path="/about" element={<AboutPage />} />
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/filters" element={<FiletesPage />} />
-        <Route path="/Profile" element={<ProfilePage />} />
-        <Route path="/edit-Profile/:id" element={<EditProfilePage />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/cart" element={<CartPage />} />
         <Route path="/products-details/:id" element={<ProductPage />} />
         <Route path="*" element={<NotFound />} />
+
+        {/* Protected Routes */}
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-profile/:id"
+          element={
+            <ProtectedRoute>
+              <EditProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <ProtectedRoute>
+              <CartPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
+
       <Footer />
+      <Toaster />
     </>
   );
 }
