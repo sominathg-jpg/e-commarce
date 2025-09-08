@@ -3,6 +3,7 @@ import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
+import cloudinary from "../config/cloudanary.js";
 config();
 export const register = async (req, res) => {
   try {
@@ -95,6 +96,80 @@ export const login = async (req, res) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
-export const updateProfile = (req, res) => {
-  res.status(200).json({ message: "ok" });
+export const updateProfile = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const profile = req.file;
+    const { name, email, phone, password, address } = req.body;
+
+    console.log(id);
+    // console.log(profile);
+    // console.log({ name, email, phone, password, address });
+
+    // Check if user exists
+    const foundUser = await User.findById(id);
+    if (!foundUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    const updates = {}; // collect dynamic updates
+
+    // ✅ Handle profile picture
+    if (profile) {
+      const uploadResponse = await cloudinary.uploader.upload(
+        `data:${profile.mimetype};base64,${profile.buffer.toString("base64")}`,
+        { folder: "profile" }
+      );
+      updates.avatar = uploadResponse.secure_url;
+    }
+
+    // ✅ Handle text fields
+    if (name) updates.name = name;
+    if (email) updates.email = email;
+    if (phone) updates.phone = phone;
+    if (address) updates.address = address;
+
+    // ✅ Handle password securely
+    if (password) {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      updates.password = hashedPassword;
+    }
+
+    // ✅ If no updates provided
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No updates provided",
+      });
+    }
+
+    // ✅ Update user in DB
+    const updatedUser = await User.findByIdAndUpdate(id, updates, {
+      new: true,
+    }).select("-password"); // hide password in response
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Update profile error:", error);
+
+    if (error.http_code === 413) {
+      return res.status(413).json({
+        success: false,
+        message:
+          "The uploaded file is too large. Please upload a smaller file.",
+      });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
 };

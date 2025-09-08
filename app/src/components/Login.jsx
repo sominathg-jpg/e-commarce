@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useAuthStore } from "../store/authStore.jsx";
+import { useAuthStore } from "../store/use";
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-input": {
     height: "1.25rem",
@@ -43,7 +43,7 @@ const Login = () => {
         formData
       );
 
-      console.log(res);
+      // console.log(res);
 
       if (res.data.success) {
         toast.success("Login successful 🎉");

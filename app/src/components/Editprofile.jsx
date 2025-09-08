@@ -1,56 +1,100 @@
 import React, { useState } from "react";
-
+import { useAuthStore } from "../store/authStore";
+import axios from "axios";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 const EditProfilePage = () => {
-  // Dummy initial user data
-  const [user, setUser] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 234 567 890",
-    address: "123 Main Street, City, Country",
-    avatar: "https://i.pravatar.cc/150?img=12",
-  });
+  const { user, setUser } = useAuthStore();
+  const [formUser, setFormUser] = useState(user);
+  const [preview, setPreview] = useState(user?.avatar || user?.profile);
+  const [newProfilePic, setNewProfilePic] = useState(null); // 🔹 new field
+  const [newPreview, setNewPreview] = useState(null); // preview for new pic
+  const [loading, setLoading] = useState(false);
 
-  const [preview, setPreview] = useState(user.avatar);
-
+  const navigate = useNavigate();
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setFormUser({ ...formUser, [name]: value });
   };
 
-  const handleFileChange = (e) => {
+  const handleNewFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setPreview(URL.createObjectURL(file));
-      setUser({ ...user, avatar: file });
+      setNewPreview(URL.createObjectURL(file));
+      setNewProfilePic(file);
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here, like sending to backend
-    console.log("Updated user data:", user);
-    alert("Profile updated successfully!");
+
+    // console.log(user);
+
+    try {
+      setLoading(true);
+
+      const formData = new FormData();
+      if (formUser.name) formData.append("name", formUser.name);
+      if (formUser.email) formData.append("email", formUser.email);
+      if (formUser.phone) formData.append("phone", formUser.phone);
+      if (formUser.address) formData.append("address", formUser.address);
+
+      // 🔹 if new profile pic selected, send it
+      if (newProfilePic) formData.append("profile", newProfilePic);
+
+      const response = await axios.patch(
+        `http://localhost:3000/api/auth/update-profile/${user.id}`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
+
+      if (response.data.success) {
+        setUser(response.data.updatedUser);
+        toast.success("Profile updated successfully!");
+        console.log(user);
+        navigate("/profile");
+      }
+    } catch (error) {
+      console.error("Update profile error:", error);
+      toast.error(error.response?.data?.message || "Failed to update profile");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen p-6 flex justify-center items-start pt-30 ">
+    <div className="bg-gray-50 min-h-screen p-6 flex justify-center items-start pt-30">
       <div className="w-full max-w-2xl bg-white p-6 rounded-xl shadow-md">
         <h2 className="text-2xl font-bold text-gray-800 mb-6">Edit Profile</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Profile Picture */}
+          {/* Current Profile Picture */}
           <div className="flex flex-col items-center">
             <img
               src={preview}
-              alt="Profile"
-              className="w-24 h-24 rounded-full object-cover mb-4 border"
+              alt="Current Profile"
+              className="w-24 h-24 rounded-full object-cover mb-2 border"
             />
+            <p className="text-sm text-gray-500">Current Profile Picture</p>
+          </div>
+
+          {/* New Profile Picture Upload */}
+          <div className="flex flex-col items-center">
+            {newPreview && (
+              <img
+                src={newPreview}
+                alt="New Profile Preview"
+                className="w-24 h-24 rounded-full object-cover mb-2 border"
+              />
+            )}
             <label className="cursor-pointer text-purple-600 font-semibold hover:underline">
-              Change Profile Picture
+              Upload New Profile Picture
               <input
                 type="file"
                 accept="image/*"
-                onChange={handleFileChange}
+                onChange={handleNewFileChange}
                 className="hidden"
               />
             </label>
@@ -62,10 +106,9 @@ const EditProfilePage = () => {
             <input
               type="text"
               name="name"
-              value={user.name}
+              value={formUser.name}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
             />
           </div>
 
@@ -77,10 +120,9 @@ const EditProfilePage = () => {
             <input
               type="email"
               name="email"
-              value={user.email}
+              value={formUser.email}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
             />
           </div>
 
@@ -92,10 +134,9 @@ const EditProfilePage = () => {
             <input
               type="tel"
               name="phone"
-              value={user.phone}
+              value={formUser.phone}
               onChange={handleChange}
               className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
             />
           </div>
 
@@ -106,11 +147,10 @@ const EditProfilePage = () => {
             </label>
             <textarea
               name="address"
-              value={user.address}
+              value={formUser.address}
               onChange={handleChange}
               rows={3}
               className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
             />
           </div>
 
@@ -118,9 +158,10 @@ const EditProfilePage = () => {
           <div className="text-center">
             <button
               type="submit"
-              className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+              disabled={loading}
+              className="bg-purple-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-purple-700 transition disabled:opacity-50"
             >
-              Save Changes
+              {loading ? "Saving..." : "Save Changes"}
             </button>
           </div>
         </form>

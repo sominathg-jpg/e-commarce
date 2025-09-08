@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { isLogin } = useAuthStore();
+  const { isLogin, user } = useAuthStore();
   return (
     <header className="w-full fixed border-b z-10 top-0 left-0  bg-white">
       {/* Top Bar */}
@@ -50,13 +50,35 @@ const Header = () => {
 
         {isLogin ? (
           <div className="flex items-center gap-4 md:gap-6">
-            <Link
-              to={"/profile"}
-              className="hidden md:flex flex-col items-center text-sm"
-            >
-              <PersonOutlineIcon className="hover:text-purple-500" />
-              <span className="hover:text-purple-500">Account</span>
-            </Link>
+            {isLogin ? (
+              // 🔹 Show user profile when logged in
+              <Link
+                to="/profile"
+                className="hidden md:flex flex-col items-center text-sm"
+              >
+                {user?.profile ? (
+                  <img
+                    src={user.profile}
+                    alt="profile"
+                    className="w-10 h-10 rounded-full border border-purple-500"
+                  />
+                ) : (
+                  <PersonOutlineIcon className="hover:text-purple-500" />
+                )}
+                <span className="hover:text-purple-500">
+                  {user?.name || "Account"}
+                </span>
+              </Link>
+            ) : (
+              // 🔹 Show default "Account" link when not logged in
+              <Link
+                to="/login"
+                className="hidden md:flex flex-col items-center text-sm"
+              >
+                <PersonOutlineIcon className="hover:text-purple-500" />
+                <span className="hover:text-purple-500">Login</span>
+              </Link>
+            )}
             <Link to="/profile" className="relative">
               <FavoriteBorderIcon className="hover:text-purple-500" />
               <span className="absolute -top-2 -right-2 bg-purple-600 text-white text-xs px-1 rounded-full">
@@ -134,6 +156,7 @@ const Header = () => {
       {mobileMenuOpen && (
         <div className="md:hidden bg-gray-50 border-t">
           {/* Search Bar Mobile */}
+
           <div className="flex items-center bg-gray-100 rounded-md px-3 m-3">
             <input
               type="text"
@@ -145,23 +168,75 @@ const Header = () => {
 
           {/* Links */}
           <div className="flex flex-col gap-4 p-4 text-gray-700 font-medium">
-            <Link className="hover:text-purple-500" to="/home">
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/home"
+            >
               Home
             </Link>
-            <Link className="hover:text-purple-500" to="/filter">
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/filters"
+            >
               Shop
             </Link>
-            <Link className="hover:text-purple-500" to="/filtes">
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/filters"
+            >
               Fruits & Vegetables
             </Link>
-            <Link className="hover:text-purple-500" to="/filtes">
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/filters"
+            >
               Beverages
             </Link>
-            <Link className="hover:text-purple-500" to="/blogs">
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/blogs"
+            >
               Blog
             </Link>
-            <Link className="hover:text-purple-500" to="/contact">
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/contact"
+            >
               Contact
+            </Link>
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/about"
+            >
+              About Us
+            </Link>
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/profile"
+            >
+              My account
+            </Link>
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/profile"
+            >
+              Wishlist
+            </Link>
+            <Link
+              onClick={() => setMobileMenuOpen(false)}
+              className="hover:text-purple-500"
+              to="/profile"
+            >
+              Order Tracking
             </Link>
           </div>
         </div>

@@ -16,6 +16,7 @@ import AboutPage from "./components/AboutPage";
 import { Toaster } from "react-hot-toast";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useAuthStore } from "./store/authStore";
+// import Dashboard from "./components/vender/VenderDashboard";
 function App() {
   const { isLogin } = useAuthStore(); // ✅ check auth state
 
@@ -39,6 +40,7 @@ function App() {
         <Route path="/blogs" element={<BlogPage />} />
         <Route path="/filters" element={<FiletesPage />} />
         <Route path="/contact" element={<Contact />} />
+        {/* <Route path="/vender-dashboard" element={<Dashboard />} /> */}
         <Route path="/products-details/:id" element={<ProductPage />} />
         <Route path="*" element={<NotFound />} />
 

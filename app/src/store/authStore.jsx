@@ -23,7 +23,10 @@ export const useAuthStore = create(
           token: null,
           isLogin: false,
         }),
-
+      setUser: (updatedUser) =>
+        set((state) => ({
+          user: { ...state.user, ...updatedUser },
+        })),
       updateUser: (newUserData) =>
         set((state) => ({
           user: { ...state.user, ...newUserData },

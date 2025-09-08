@@ -7,11 +7,10 @@ const productSchema = new mongoose.Schema(
     price: { type: Number, required: true },
     oldPrice: { type: Number },
     stock: { type: Number, default: 0 },
-    sku: { type: String },
+
     brand: { type: String },
     category: { type: String },
-    subCategory: { type: String },
-    tags: [{ type: String }],
+
     colors: [{ type: String }],
     weight: { type: String },
     material: { type: String },
