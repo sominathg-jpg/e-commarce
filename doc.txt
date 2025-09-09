@@ -1,8 +1,26 @@
+//profile
 POST-http://localhost:3000/api/auth/register
 POST-http://localhost:3000/api/auth/login
 PATCH-http://localhost:3000/api/auth/update-profile/68be654c0d78d71df35a9d2f
+//product
 POST-http://localhost:3000/api/product/add-product
 GET-http://localhost:3000/api/product/get-perticualar-product/68bed5335dfd6c350940115f
 GET-http://localhost:3000/api/product/getproducts/
 DELETE-http://localhost:3000/api/product/delete-product/68bed5335dfd6c350940115f
 PATCH-http://localhost:3000/api/product/update-product/68bed8bf3e624808c38e39cc
+//category
+POST-http://localhost:3000/api/categories/add-category
+GET- http://localhost:3000/api/categories/getcategories
+PATCH-http://localhost:3000/api/categories/update-category/68bfcbfc5724d9475bfef10d
+DELETE-http://localhost:3000/api/categories/delete-category/68bfcbfc5724d9475bfef10d
+// review 
+POST-http://localhost:3000/api/review/68bee09a4444faa0b5ac7057/reviews
+PATCH-http://localhost:3000/api/review/reviews/68bfd14bb76d762187cf8605(update rating and comme)
+PATCH-http://localhost:3000/api/review/reviews/68bfd14bb76d762187cf8605/like
+DELETE-http://localhost:3000/api/review/68bee09a4444faa0b5ac7057/reviews/68bfd14bb76d762187cf8605(product_id,reviewid)
+//orders
+POST- http://localhost:3000/api/order/add-order
+GET-http://localhost:3000/api/order/get-orders
+GET-http://localhost:3000/api/order/get-order/68c004e4e55d86ef75f870a8
+PATCH-http://localhost:3000/api/order/update-order/68c004e4e55d86ef75f870a8(orderid)
+DELETE-http://localhost:3000/api/order/delete-order/68c004e4e55d86ef75f870a8

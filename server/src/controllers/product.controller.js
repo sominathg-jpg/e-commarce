@@ -101,7 +101,7 @@ export const createProduct = async (req, res) => {
         `data:${product.mimetype};base64,${product.buffer.toString("base64")}`,
         { folder: "products" }
       );
-      imageUrls[imageUrls.length ] = result.secure_url;
+      imageUrls[imageUrls.length] = result.secure_url;
     }
 
     const newProduct = new Product({
@@ -191,7 +191,10 @@ export const deleteProduct = async (req, res) => {
 export const getProduct = async (req, res) => {
   const { id } = req.params;
   try {
-    const product = await Product.find({ _id: id });
+    const product = await Product.find({ _id: id }).populate({
+      path: "reviews",
+      populate: { path: "user", select: "name email" }, // also populate user inside review
+    });
     res.status(200).json({ message: "ok", product: product });
   } catch (error) {
     res.status(500).status(500).json({ message: "Internal server" });
@@ -200,7 +203,10 @@ export const getProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).populate({
+      path: "reviews",
+      populate: { path: "user", select: "name email" }, // also populate user inside review
+    });
     console.log(products);
     res.status(200).json({ products, success: true });
   } catch (error) {
