@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 // Mock product data
+import useProductStore from "../../store/useProductStore";
 const initialProducts = [
   {
     id: 1,
@@ -219,7 +220,10 @@ const TrashIcon = ({ size, className }) => (
 );
 
 const Products = () => {
-  const [products, setProducts] = useState(initialProducts);
+  // const [products, setProducts] = useState(initialProducts);
+
+  const { products } = useProductStore();
+  console.log(products);
 
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex flex-col md:flex-row">
@@ -249,9 +253,12 @@ const Products = () => {
               />
               <span className="absolute top-0 right-0 block w-2 h-2 rounded-full bg-red-500"></span>
             </div>
-            <Link to={'/add-product'} className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors">
+            <Link
+              to={"/add-product"}
+              className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors"
+            >
               <AddProductIcon size={20} />
-              <span >Add Product</span>
+              <span>Add Product</span>
             </Link>
           </div>
         </header>
@@ -311,14 +318,14 @@ const Products = () => {
                   className="bg-white p-4 rounded-xl shadow-md flex flex-col items-center text-center"
                 >
                   <img
-                    src={product.imageUrl}
+                    src={product.images[0]}
                     alt={product.name}
                     className="w-24 h-24 object-contain mb-4 rounded-lg"
                   />
                   <h3 className="font-semibold text-gray-800 text-sm mb-1">
                     {product.name}
                   </h3>
-                  <p className="text-gray-500 text-xs mb-2">{product.size}</p>
+                  <p className="text-gray-500 text-xs mb-2">{product?.size}</p>
                   <p className="text-lg font-bold text-gray-800 mb-2">
                     ${product.price.toFixed(2)}
                   </p>
@@ -336,7 +343,7 @@ const Products = () => {
                         />
                       ))}
                     </div>
-                    <span>({product.reviews})</span>
+                    {/* <span>({product.reviews})</span> */}
                   </div>
                   <div className="flex items-center justify-between w-full">
                     <button className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors mr-2">

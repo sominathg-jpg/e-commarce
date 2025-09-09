@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FaAngleDown,
   FaAngleLeft,
@@ -19,6 +19,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+import axios from "axios";
 // Mock data for the Recharts graph
 const chartData = [
   { name: "01 Jan", uv: 40 },

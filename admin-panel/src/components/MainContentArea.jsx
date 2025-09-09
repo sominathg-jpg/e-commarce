@@ -5,9 +5,22 @@ import Products from "../components/Pages/Products";
 // Import other pages...
 import InVoices from "././Pages/Invoices";
 import Customers from "./Pages/Customers";
+import Categories from "./Pages/Categories";
 import ProductDetails from "./Pages/ProductDetails";
 import AddProduct from "./Pages/Addproduct";
+import useProductStore from "../store/useProductStore";
+import { useEffect } from "react";
 const MainContent = () => {
+  const { fetchProducts, fetchCategories, products, categories } =
+    useProductStore();
+
+  useEffect(() => {
+    fetchCategories();
+    fetchProducts();
+
+    // console.log("this is products", products);
+    // console.log("this is categories", categories);
+  }, []);
   return (
     <div className="flex-1 p-6 overflow-y-auto">
       <Routes>
@@ -18,6 +31,7 @@ const MainContent = () => {
         <Route path="/invoices" element={<InVoices />} />
         <Route path="/productDetails/:id" element={<ProductDetails />} />
         <Route path="/add-product" element={<AddProduct />} />
+        <Route path="/categories" element={<Categories />} />
         {/* Add other routes */}
       </Routes>
     </div>

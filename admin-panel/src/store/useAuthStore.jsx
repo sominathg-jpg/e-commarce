@@ -12,6 +12,7 @@ const useUserStore = create(
 
       // ✅ clear user on logout
       clearUser: () => set({ user: null, token: null }),
+      
     }),
     {
       name: "user-storage", // key in localStorage

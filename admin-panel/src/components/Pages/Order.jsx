@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 // Sample data to simulate the orders list.
 const initialOrders = [
   {
@@ -217,9 +217,14 @@ const ArrowRight = ({ size, className }) => (
   </svg>
 );
 
+import useOrderStore from "../../store/useOrderStore";
 const Order = () => {
-  const [orders, setOrders] = useState(initialOrders);
+  // const [orders, setOrders] = useState(initialOrders);
 
+  const { orders, fetchOrders } = useOrderStore();
+  useEffect(() => {
+    fetchOrders();
+  }, []);
   // Function to determine the status color
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
@@ -244,7 +249,6 @@ const Order = () => {
       <header className="flex items-center justify-between pb-6">
         <h1 className="text-3xl font-bold text-gray-800">Orders</h1>
         <div className="flex items-center space-x-4">
-          
           <div className="relative">
             <BellIcon
               className="text-gray-600 hover:text-purple-600 cursor-pointer"
@@ -252,12 +256,8 @@ const Order = () => {
             />
             <span className="absolute top-0 right-0 block w-2 h-2 rounded-full bg-red-500"></span>
           </div>
-         
-          
         </div>
       </header>
-
-    
 
       {/* Main Content Area */}
       <main className="bg-white p-6 rounded-2xl shadow-sm">
@@ -324,6 +324,8 @@ const Order = () => {
                 <th className="py-3 px-4 font-semibold">NAME</th>
                 <th className="py-3 px-4 font-semibold">DATE</th>
                 <th className="py-3 px-4 font-semibold">TOTAL</th>
+                <th className="py-3 px-4 font-semibold">Payment Method</th>
+                <th className="py-3 px-4 font-semibold">Products</th>
                 <th className="py-3 px-4 font-semibold">STATUS</th>
                 <th className="py-3 px-4 font-semibold text-right">ACTIONS</th>
               </tr>
@@ -341,18 +343,36 @@ const Order = () => {
                     />
                   </td>
                   <td className="py-4 px-4 font-medium text-purple-600">
-                    {order.id}
+                    {order._id}
                   </td>
-                  <td className="py-4 px-4">{order.name}</td>
-                  <td className="py-4 px-4 text-gray-500">{order.date}</td>
-                  <td className="py-4 px-4 font-medium">{order.total}</td>
+                  <td className="py-4 px-4">{order?.user?.name}</td>
+                  <td className="py-4 px-4 text-gray-500">{order.createdAt}</td>
+                  <td className="py-4 px-4 font-medium">
+                    {order?.totalPrice}
+                  </td>{" "}
+                  <td className="py-4 px-4 text-center font-medium">
+                    {order?.paymentMethod}
+                  </td>
+                  <ul className="space-y-2">
+                    {order?.products.map((product) => (
+                      <li key={product._id}>
+                        <Link
+                          to={`/productDetails/${product._id}`} // navigates to ProductDetails page
+                          className="text-blue-600 hover:underline"
+                        >
+                          {product.name}
+                        </Link>{" "}
+                        ,
+                      </li>
+                    ))}
+                  </ul>
                   <td className="py-4 px-4">
                     <span
                       className={`inline-block py-1 px-3 text-xs font-semibold rounded-full ${getStatusColor(
-                        order.status
+                        order.orderStatus
                       )}`}
                     >
-                      {order.status}
+                      {order.orderStatus}
                     </span>
                   </td>
                   <td className="py-4 pl-4 text-right">

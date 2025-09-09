@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { Profiler, use, useEffect, useState } from "react";
 
 // Helper components for icons
 const SearchIcon = ({ size, className }) => (
@@ -161,9 +162,11 @@ const PackageIcon = ({ size, className }) => (
   </svg>
 );
 
+import { useParams } from "react-router-dom";
 const ProductDetails = () => {
   const [activeTab, setActiveTab] = useState("descriptions");
-
+  const { id } = useParams();
+  const [product, setProduct] = useState();
   const renderStars = (rating) => {
     const stars = [];
     for (let i = 1; i <= 5; i++) {
@@ -179,18 +182,33 @@ const ProductDetails = () => {
     return stars;
   };
 
+  const getProduct = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3000/api/product/get-perticualar-product/${id}`
+      );
+      // console.log(res.data.product[0]);
+      setProduct(res.data.product[0]);
+      // console.log(product);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getProduct();
+  }, []);
+  // ✅ log after product updates
+  useEffect(() => {
+    if (product) {
+      console.log("Product updated:", product);
+    }
+  }, [product]);
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex flex-col">
       {/* Top Header */}
       <header className="flex items-center justify-between pb-6">
         <h1 className="text-3xl font-bold text-gray-800">Product Management</h1>
       </header>
-
-      {/* Breadcrumb Navigation */}
-      <div className="text-sm text-gray-500 mb-6">
-        <span>Dashboard</span> &gt;{" "}
-        <span className="text-gray-800 font-medium">Product Details</span>
-      </div>
 
       {/* Main Content Area */}
       <main className="flex flex-col flex-grow">
@@ -199,7 +217,7 @@ const ProductDetails = () => {
           <div className="flex flex-col items-center lg:w-1/2">
             <div className="relative w-full aspect-w-1 aspect-h-1 mb-6 rounded-2xl overflow-hidden">
               <img
-                src="https://placehold.co/600x600/E5E7EB/4B5563?text=Main+Image"
+                src={product?.images[0]}
                 alt="Main product image"
                 className="w-full h-full object-cover"
               />
@@ -210,29 +228,15 @@ const ProductDetails = () => {
                 <ChevronRightIcon size={24} />
               </button>
             </div>
-            <div className="flex space-x-4 overflow-x-auto w-full justify-center">
-              {[1, 2, 3, 4, 5].map((item) => (
-                <div
-                  key={item}
-                  className="w-20 h-20 rounded-xl overflow-hidden border-2 border-gray-300 hover:border-purple-500 cursor-pointer"
-                >
-                  <img
-                    src={`https://placehold.co/80x80/E5E7EB/4B5563?text=Thumb+${item}`}
-                    alt={`Thumbnail ${item}`}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              ))}
-            </div>
           </div>
           <div className="lg:w-1/2">
             <div className="flex items-center justify-between">
               <span className="bg-gray-200 text-gray-700 text-sm font-semibold px-3 py-1 rounded-full">
-                Technology Products
+                {product?.brand}
               </span>
               <div className="flex items-center space-x-1 text-gray-500">
                 <HeartIcon size={20} />
-                <span>50</span>
+                <span>{50}</span>
               </div>
             </div>
             <h2 className="text-3xl font-bold text-gray-800 mt-4">
@@ -240,31 +244,25 @@ const ProductDetails = () => {
             </h2>
             <div className="flex items-center justify-between mt-2">
               <p className="text-green-500 font-medium">In stock</p>
-              <p className="text-gray-500 text-sm">Stock Level: 150 units</p>
+              <p className="text-gray-500 text-sm">
+                Stock Level: {product?.stock}
+              </p>
             </div>
             <div className="flex items-baseline space-x-2 my-4">
               <span className="text-xl font-bold text-gray-400 line-through">
-                $699.99
+                $ {product?.oldPrice}
               </span>
               <span className="text-4xl font-extrabold text-gray-800">
-                $499.90
+                ${product?.price}
               </span>
             </div>
             <div className="flex items-center space-x-1 mb-4">
-              {renderStars(4)}
-              <span className="text-gray-500 text-sm">(3)</span>
+              {renderStars(product?.rating)}
+              <span className="text-gray-500 text-sm">{product?.rating}</span>
             </div>
-            <p className="text-gray-600 mb-6">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ad
-              assumenda autem eaque error explicabo fugiat iusto necessitatibus,
-              temporibus. Laudantium, voluptate?
-            </p>
+            <p className="text-gray-600 mb-6">{product?.description}</p>
             <h3 className="font-semibold text-gray-800">Features:</h3>
-            <p className="text-gray-600 text-sm">
-              It is a long established fact that a reader will be distracted.
-              Contrary to popular belief, Lorem Ipsum is not text. There are
-              many variations of passages of lorem.
-            </p>
+            <p className="text-gray-600 text-sm">{product?.description}</p>
             <div className="flex items-center space-x-4 mt-6">
               <button className="flex items-center space-x-2 bg-purple-600 text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-700 transition-colors">
                 <EditIcon size={20} />
@@ -299,7 +297,7 @@ const ProductDetails = () => {
                   : "text-gray-500 hover:text-gray-700"
               }`}
             >
-              Reviews (3)
+              Reviews ({product?.reviews.length})
             </button>
             <button
               onClick={() => setActiveTab("sss")}
@@ -315,39 +313,43 @@ const ProductDetails = () => {
           <div>
             {activeTab === "descriptions" && (
               <div className="space-y-4 text-gray-600">
-                <p>
-                  Viveramus ultricies augue vitae commodo condimentum.
-                  Nullamfaucibus eros eu mauris feugiat, eget consectetur tortor
-                  tempus. Sed volutpatmollis dui eget fringilla. Vestibulum
-                  blandit urna ut tellus lobortis tristique. Vestibulum ante
-                  ipsum primis in faucibus orci luctus et ultrices posuere
-                  cubilia Curae; Pellentesque quis cursus mauris. Nam in ornare
-                  erat. Vestibulum convallis enim ac massa dapibus consectetur.
-                  Maecenas facilisis eros ac felis mattis, egetauctor sapien
-                  varius.
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Aperiam asperiores dolorum earum fugiat nostrum obcaecati,
-                  quis ratione rerum sapiente soluta!
-                </p>
-                <h3 className="font-semibold text-gray-800">Chemicals in</h3>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                  Pariatur, reiciendis!
-                </p>
-                <p>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ab,
-                  animi, aperiam corporis, dolorum fugiat fugit maxime nisi
-                  optio quo similique sit sunt tempora. Commodi culpa debitis
-                  deleniti dolore maiores, maxime praesentium. Autem dicta
-                  dolore ipsum molestiae quae, quasi soluta tempora.
-                </p>
+                {product?.description}
               </div>
             )}
             {activeTab === "reviews" && (
               <div className="text-gray-600">
-                <p>Reviews content goes here...</p>
+                {product?.reviews && product?.reviews?.length > 0 ? (
+                  product?.reviews.map((review, i) => (
+                    <div
+                      key={i}
+                      className="p-4 border border-gray-200 rounded-xl bg-gray-50"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="font-semibold text-gray-800">
+                          {review?.name}
+                        </span>
+                        <div className="flex space-x-1">
+                          {Array.from({ length: 5 }).map((_, idx) => (
+                            <StarIcon
+                              key={idx}
+                              size={16}
+                              className="text-yellow-400"
+                              fill={
+                                idx < review.rating ? "currentColor" : "none"
+                              }
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      <p className="text-gray-700">{review.comment}</p>
+                      <span className="text-xs text-gray-400">
+                        {new Date(review.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                  ))
+                ) : (
+                  <p>No reviews yet.</p>
+                )}
               </div>
             )}
             {activeTab === "sss" && (

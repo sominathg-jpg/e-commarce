@@ -10,15 +10,13 @@ import {
   FaPlus,
 } from "react-icons/fa";
 import { NavLink, useSearchParams } from "react-router-dom";
-
+import { BiSolidCategory } from "react-icons/bi";
 const Sidebar = () => {
   const [selectedtab, setSelectedTab] = useState("/dashboard");
   return (
     <div className="w-72 h-screen bg-white shadow-lg flex flex-col justify-between p-4">
       {/* Top Section */}
       <div>
-      
-
         {/* Profile Section */}
         <div className="flex items-center gap-4 mb-6">
           <div className="bg-purple-600 text-white rounded-full w-10 h-10 flex items-center justify-center text-lg font-bold">
@@ -76,6 +74,17 @@ const Sidebar = () => {
             }  px-4 py-2 rounded-lg font-medium`}
           >
             <FaFileInvoice /> Invoice
+          </NavLink>
+          <NavLink
+            to="/categories"
+            onClick={() => setSelectedTab("/categories")}
+            className={`flex items-center gap-3 ${
+              selectedtab == "/categories"
+                ? "bg-purple-100 text-purple-700"
+                : ""
+            }  px-4 py-2 rounded-lg font-medium`}
+          >
+            <BiSolidCategory /> Categories
           </NavLink>
         </nav>
       </div>

@@ -13,20 +13,28 @@ const useProductStore = create(
           const res = await axios.get(
             "http://localhost:3000/api/product/getproducts/"
           );
-          console.log(res);
+          // console.log(res);
 
           set({ products: res.data.products });
         } catch (err) {
           console.log(err);
         }
       },
+      // api/categoryApi.js
       fetchCategories: async () => {
-
+        set({ loading: true, error: null });
         try {
-            
-            const res= await axios.get('')
+          const response = await fetch(
+            "http://localhost:3000/api/categories/getcategories"
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch categories");
+          }
+          const data = await response.json();
+          set({ categories: data.categories, loading: false }); // ✅ update state
         } catch (error) {
-            
+          console.error("Error fetching categories:", error);
+          set({ error: error.message, loading: false });
         }
       },
     }),
