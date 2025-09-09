@@ -1,9 +1,10 @@
 import Order from "../models/order.model.js";
-
+import User from "../models/user.model.js";
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
 export const addOrder = async (req, res) => {
+  const id = req.params.id;
   try {
     const {
       user,
@@ -34,6 +35,12 @@ export const addOrder = async (req, res) => {
     });
 
     const createdOrder = await order.save();
+
+    // Push order into user.orders
+    await User.findByIdAndUpdate(id, {
+      $push: { orders: createdOrder._id },
+    });
+
     res.status(201).json({ success: true, order: createdOrder });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

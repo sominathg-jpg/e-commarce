@@ -10,7 +10,7 @@ import {
 const router = express.Router();
 
 // Create a new order (only logged-in users)
-router.post("/add-order", addOrder);
+router.post("/add-order/:id", addOrder);
 
 // Get all orders (admin only)
 router.get("/get-orders", getOrders);

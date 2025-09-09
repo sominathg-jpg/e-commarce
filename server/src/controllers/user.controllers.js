@@ -51,7 +51,17 @@ export const login = async (req, res) => {
     }
 
     // Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).populate({
+      path: "orders",
+      populate: {
+        path: "products", // populate products inside each order
+        select: "name price reviews",
+        populate: {
+          path: "reviews",
+          populate: { path: "user", select: "name email" },
+        },
+      },
+    });
     if (!user) {
       return res
         .status(404)
@@ -84,12 +94,7 @@ export const login = async (req, res) => {
       success: true,
       message: "Login successful",
       token,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        profile: user.avatar,
-      },
+      user
     });
   } catch (error) {
     console.error("Login Error:", error);
