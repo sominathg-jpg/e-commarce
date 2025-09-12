@@ -4,7 +4,7 @@ import { styled } from "@mui/system";
 import { Link, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { useAuthStore } from "../store/use";
+import { useAuthStore } from "../store/authStore";
 const StyledTextField = styled(TextField)({
   "& .MuiOutlinedInput-input": {
     height: "1.25rem",

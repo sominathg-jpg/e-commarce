@@ -1,221 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+
+import { ArrowDownNarrowWide, Edit, Filter, Search } from "lucide-react";
+import { FaArrowDown, FaArrowLeft, FaArrowRight, FaBell } from "react-icons/fa";
 // Sample data to simulate the orders list.
-const initialOrders = [
-  {
-    id: "#3210",
-    name: "Cortie Gemson",
-    date: "May 23, 2021",
-    total: "$239.00",
-    status: "Processing",
-  },
-  {
-    id: "#3210",
-    name: "Mathilde Tumilson",
-    date: "May 15, 2021",
-    total: "$650.50",
-    status: "Shipped",
-  },
-  {
-    id: "#3210",
-    name: "Audrye Headford",
-    date: "Apr 24, 2021",
-    total: "$100.00",
-    status: "Completed",
-  },
-  {
-    id: "#3210",
-    name: "Brantley Meil",
-    date: "Apr 10, 2021",
-    total: "$19.00",
-    status: "Refunded",
-  },
-  {
-    id: "#3210",
-    name: "Dominique Enriques",
-    date: "Mar 5, 2021",
-    total: "$150.00",
-    status: "Cancelled",
-  },
-  {
-    id: "#3210",
-    name: "Cortie Gemson",
-    date: "May 23, 2021",
-    total: "$239.00",
-    status: "Processing",
-  },
-  {
-    id: "#3210",
-    name: "Mathilde Tumilson",
-    date: "May 15, 2021",
-    total: "$650.50",
-    status: "Shipped",
-  },
-  {
-    id: "#3210",
-    name: "Audrye Headford",
-    date: "Apr 24, 2021",
-    total: "$100.00",
-    status: "Completed",
-  },
-  {
-    id: "#3210",
-    name: "Brantley Meil",
-    date: "Apr 10, 2021",
-    total: "$19.00",
-    status: "Refunded",
-  },
-  {
-    id: "#3210",
-    name: "Dominique Enriques",
-    date: "Mar 5, 2021",
-    total: "$150.00",
-    status: "Cancelled",
-  },
-];
-
-// Helper components for icons to replace react-icons
-const SearchIcon = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <circle cx="11" cy="11" r="8"></circle>
-    <path d="m21 21-4.3-4.3"></path>
-  </svg>
-);
-
-const OptionsIcon = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <circle cx="12" cy="12" r="1"></circle>
-    <circle cx="19" cy="12" r="1"></circle>
-    <circle cx="5" cy="12" r="1"></circle>
-  </svg>
-);
-
-const ChevronDownIcon = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="m6 9 6 6 6-6"></path>
-  </svg>
-);
-
-const FilterIcon = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-  </svg>
-);
-
-const BellIcon = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"></path>
-    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"></path>
-  </svg>
-);
-
-const ShoppingBagIcon = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"></path>
-    <path d="M3 6h18"></path>
-    <path d="M16 10a4 4 0 0 1-8 0"></path>
-  </svg>
-);
-
-const ArrowLeft = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="m15 18-6-6 6-6"></path>
-  </svg>
-);
-
-const ArrowRight = ({ size, className }) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width={size}
-    height={size}
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    className={className}
-  >
-    <path d="m9 18 6-6-6-6"></path>
-  </svg>
-);
 
 import useOrderStore from "../../store/useOrderStore";
 const Order = () => {
@@ -250,7 +38,7 @@ const Order = () => {
         <h1 className="text-3xl font-bold text-gray-800">Orders</h1>
         <div className="flex items-center space-x-4">
           <div className="relative">
-            <BellIcon
+            <FaBell
               className="text-gray-600 hover:text-purple-600 cursor-pointer"
               size={24}
             />
@@ -269,7 +57,7 @@ const Order = () => {
                 <option>All Orders</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <ChevronDownIcon size={20} />
+                <ArrowDownNarrowWide size={20} />
               </div>
             </div>
 
@@ -278,7 +66,7 @@ const Order = () => {
                 <option>Sort by</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <ChevronDownIcon size={20} />
+                <FaArrowDown size={15} />
               </div>
             </div>
 
@@ -288,23 +76,23 @@ const Order = () => {
                 placeholder="Search"
                 className="py-2 pl-10 pr-4 rounded-lg bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              <SearchIcon
+              <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                 size={20}
               />
             </div>
 
             <button className="flex items-center space-x-2 py-2 px-4 rounded-lg text-gray-700 hover:bg-gray-200 transition-colors">
-              <FilterIcon size={20} />
+              <Filter size={20} />
               <span>Filter</span>
             </button>
           </div>
 
           <div className="flex items-center space-x-2">
             <button className="flex items-center space-x-2 py-2 px-4 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
-              <OptionsIcon size={20} />
+              <Edit size={20} />
               <span>Actions</span>
-              <ChevronDownIcon size={20} />
+              <FaArrowDown size={15} />
             </button>
           </div>
         </div>
@@ -375,9 +163,9 @@ const Order = () => {
                       {order.orderStatus}
                     </span>
                   </td>
-                  <td className="py-4 pl-4 text-right">
-                    <button className="text-gray-500 hover:text-purple-600">
-                      <OptionsIcon size={20} />
+                  <td className="py-4 pl-4 text-center ">
+                    <button className="text-gray-500 hover:text-purple-600 ">
+                      <Edit size={20} />
                     </button>
                   </td>
                 </tr>
@@ -394,7 +182,7 @@ const Order = () => {
         </div>
         <div className="flex items-center space-x-2">
           <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-            <ArrowLeft size={20} />
+            <FaArrowLeft size={15} />
           </button>
           <button className="px-4 py-2 rounded-full bg-purple-600 text-white font-semibold">
             1
@@ -406,7 +194,7 @@ const Order = () => {
             3
           </button>
           <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-            <ArrowRight size={20} />
+            <FaArrowRight size={15} />
           </button>
         </div>
       </footer>

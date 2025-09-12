@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { FaBell, FaCreativeCommons } from "react-icons/fa";
+import { Link } from "react-router-dom";
 import {
   LineChart,
   Line,
@@ -8,6 +10,8 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import { MdCreateNewFolder } from "react-icons/md";
+import { ChevronDown, Edit, Search } from "lucide-react";
 
 // Helper components for icons to replace react-icons
 const SearchIcon = ({ size, className }) => (
@@ -271,19 +275,21 @@ const InVoices = () => {
       <header className="flex items-center justify-between pb-6">
         <h1 className="text-3xl font-bold text-gray-800">Invoices</h1>
         <div className="flex items-center space-x-4">
-          
           <div className="relative">
-            <BellIcon
+            <FaBell
               className="text-gray-600 hover:text-purple-600 cursor-pointer"
               size={24}
             />
             <span className="absolute top-0 right-0 block w-2 h-2 rounded-full bg-red-500"></span>
           </div>
-         
-          <button className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors">
-            <CreateInvoiceIcon size={20} />
+
+          <Link
+            to={"/invoice-form"}
+            className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors"
+          >
+            <MdCreateNewFolder size={20} />
             <span>Create Invoice</span>
-          </button>
+          </Link>
         </div>
       </header>
 
@@ -298,7 +304,7 @@ const InVoices = () => {
                   <option>Sort by</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <ChevronDownIcon size={20} />
+                  <ChevronDown size={20} />
                 </div>
               </div>
               <div className="relative">
@@ -306,7 +312,7 @@ const InVoices = () => {
                   <option>10</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <ChevronDownIcon size={20} />
+                  <ChevronDown size={20} />
                 </div>
               </div>
               <div className="relative">
@@ -315,7 +321,7 @@ const InVoices = () => {
                   placeholder="Search"
                   className="py-2 pl-10 pr-4 rounded-lg bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
-                <SearchIcon
+                <Search
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                   size={20}
                 />
@@ -324,7 +330,7 @@ const InVoices = () => {
             <div className="flex items-center space-x-2">
               <button className="flex items-center space-x-2 py-2 px-4 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
                 <span>Actions</span>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </button>
             </div>
           </div>
@@ -381,7 +387,7 @@ const InVoices = () => {
                     <td className="py-4 px-4 text-gray-500">{invoice.date}</td>
                     <td className="py-4 pl-4 text-right">
                       <button className="text-gray-500 hover:text-purple-600">
-                        <OptionsIcon size={20} />
+                        <Edit size={20} />
                       </button>
                     </td>
                   </tr>
@@ -390,24 +396,7 @@ const InVoices = () => {
             </table>
           </div>
 
-          {/* Pagination */}
-          <footer className="flex justify-center items-center mt-6 space-x-2">
-            <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-              <ArrowLeft size={20} />
-            </button>
-            <button className="px-4 py-2 rounded-full bg-purple-600 text-white font-semibold">
-              1
-            </button>
-            <button className="px-4 py-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-              2
-            </button>
-            <button className="px-4 py-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-              3
-            </button>
-            <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-              <ArrowRight size={20} />
-            </button>
-          </footer>
+        
         </div>
       </main>
     </div>

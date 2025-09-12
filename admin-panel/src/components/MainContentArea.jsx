@@ -10,6 +10,9 @@ import ProductDetails from "./Pages/ProductDetails";
 import AddProduct from "./Pages/Addproduct";
 import useProductStore from "../store/useProductStore";
 import { useEffect } from "react";
+import CategoryForm from "./Pages/CategoryForm";
+import InvoiceForm from "./Pages/InvoioceForm";
+import { Toaster } from "react-hot-toast";
 const MainContent = () => {
   const { fetchProducts, fetchCategories, products, categories } =
     useProductStore();
@@ -32,8 +35,12 @@ const MainContent = () => {
         <Route path="/productDetails/:id" element={<ProductDetails />} />
         <Route path="/add-product" element={<AddProduct />} />
         <Route path="/categories" element={<Categories />} />
+        <Route path="/category-form" element={<CategoryForm />} />
+        <Route path="/invoice-form" element={<InvoiceForm />} />
         {/* Add other routes */}
       </Routes>
+
+      <Toaster />
     </div>
   );
 };

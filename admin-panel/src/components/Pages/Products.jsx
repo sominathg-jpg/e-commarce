@@ -3,6 +3,15 @@ import { Link } from "react-router-dom";
 
 // Mock product data
 import useProductStore from "../../store/useProductStore";
+import { ChevronDown, Pen, Search, Stars, Trash } from "lucide-react";
+import {
+  FaArrowDown,
+  FaArrowLeft,
+  FaArrowRight,
+  FaBell,
+  FaPlus,
+  FaStar,
+} from "react-icons/fa";
 const initialProducts = [
   {
     id: 1,
@@ -241,15 +250,15 @@ const Products = () => {
                 placeholder="Search..."
                 className="py-2 pl-10 pr-4 rounded-full bg-gray-200 text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-500"
               />
-              <SearchIcon
+              <Search
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                 size={20}
               />
             </div>
             <div className="relative">
-              <BellIcon
+              <FaBell
                 className="text-gray-600 hover:text-purple-600 cursor-pointer"
-                size={24}
+                size={20}
               />
               <span className="absolute top-0 right-0 block w-2 h-2 rounded-full bg-red-500"></span>
             </div>
@@ -257,7 +266,7 @@ const Products = () => {
               to={"/add-product"}
               className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors"
             >
-              <AddProductIcon size={20} />
+              <FaPlus size={15} />
               <span>Add Product</span>
             </Link>
           </div>
@@ -274,7 +283,7 @@ const Products = () => {
                   <option>All Products</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <ChevronDownIcon size={20} />
+                  <ChevronDown size={20} />
                 </div>
               </div>
               <div className="relative inline-block w-36">
@@ -282,7 +291,7 @@ const Products = () => {
                   <option>Sort by</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <ChevronDownIcon size={20} />
+                  <ChevronDown size={20} />
                 </div>
               </div>
               <div className="relative inline-block w-24">
@@ -290,7 +299,7 @@ const Products = () => {
                   <option>10</option>
                 </select>
                 <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                  <ChevronDownIcon size={20} />
+                  <ChevronDown size={20} />
                 </div>
               </div>
               <div className="flex-grow relative">
@@ -299,14 +308,14 @@ const Products = () => {
                   placeholder="Search"
                   className="py-2 pl-10 pr-4 rounded-lg w-full bg-gray-200 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
-                <SearchIcon
+                <Search
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                   size={20}
                 />
               </div>
               <button className="flex items-center space-x-2 py-2 px-4 rounded-lg bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition-colors">
                 <span>Actions</span>
-                <ChevronDownIcon size={20} />
+                <ChevronDown size={20} />
               </button>
             </div>
 
@@ -347,34 +356,15 @@ const Products = () => {
                   </div>
                   <div className="flex items-center justify-between w-full">
                     <button className="flex-1 bg-purple-600 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-purple-700 transition-colors mr-2">
-                      <EditIcon size={16} className="inline-block mr-1" />
+                      <Pen size={16} className="inline-block mr-1" />
                       Edit Product
                     </button>
                     <button className="p-2 rounded-full bg-red-100 text-red-500 hover:bg-red-200 transition-colors">
-                      <TrashIcon size={20} />
+                      <Trash size={20} />
                     </button>
                   </div>
                 </Link>
               ))}
-            </div>
-
-            {/* Pagination */}
-            <div className="flex justify-center items-center mt-6 space-x-2">
-              <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-                <ArrowLeft size={20} />
-              </button>
-              <button className="px-4 py-2 rounded-full bg-purple-600 text-white font-semibold">
-                1
-              </button>
-              <button className="px-4 py-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-                2
-              </button>
-              <button className="px-4 py-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-                3
-              </button>
-              <button className="p-2 rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300">
-                <ArrowRight size={20} />
-              </button>
             </div>
           </div>
 
@@ -384,7 +374,7 @@ const Products = () => {
             <div className="mb-6">
               <h3 className="font-semibold text-gray-700 flex items-center justify-between mb-2">
                 Keywords
-                <ChevronDownIcon size={16} className="text-gray-500" />
+                <ChevronDown size={16} className="text-gray-500" />
               </h3>
               <div className="relative">
                 <input
@@ -392,7 +382,7 @@ const Products = () => {
                   placeholder="Phone, Headphone, Shoe..."
                   className="py-2 pl-10 pr-4 rounded-lg w-full bg-gray-100 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
-                <SearchIcon
+                <Search
                   className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
                   size={20}
                 />
@@ -401,7 +391,7 @@ const Products = () => {
             <div className="mb-6">
               <h3 className="font-semibold text-gray-700 flex items-center justify-between mb-2">
                 Categories
-                <ChevronDownIcon size={16} className="text-gray-500" />
+                <ChevronDown size={16} className="text-gray-500" />
               </h3>
               <div className="flex flex-col space-y-2 text-gray-600">
                 <label className="flex items-center">
@@ -444,7 +434,7 @@ const Products = () => {
             <div className="mb-6">
               <h3 className="font-semibold text-gray-700 flex items-center justify-between mb-4">
                 Price
-                <ChevronDownIcon size={16} className="text-gray-500" />
+                <ChevronDown size={16} className="text-gray-500" />
               </h3>
               <div className="relative h-1 bg-gray-200 rounded-full mb-4">
                 <div
@@ -468,7 +458,7 @@ const Products = () => {
             <div className="mb-6">
               <h3 className="font-semibold text-gray-700 flex items-center justify-between mb-2">
                 Colors
-                <ChevronDownIcon size={16} className="text-gray-500" />
+                <ChevronDown size={16} className="text-gray-500" />
               </h3>
               <div className="flex space-x-2">
                 <div

@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Link } from "react-router-dom";
+
 import banner1 from "../assets/images/banner1.jpg";
 import banner2 from "../assets/images/banner2.jpg";
 import banner3 from "../assets/images/banner3.jpg";
 import banner4 from "../assets/images/banner4.jpg";
-import { Link } from "react-router-dom";
+
 // Banner Data
 const banners = [
   { id: 1, image: banner1 },
@@ -17,7 +19,7 @@ const categories = [
   {
     name: "Fruits & Vegetables",
     image:
-      "https://img.freepik.com/free-psd/vibrant-colorful-fresh-produce-delightful-healthy-eating_191095-90828.jpg?t=st=1757065273~exp=1757068873~hmac=35653c3101a7f503268cd55b10c9e352bb55fbdbf0dc23bb9e45c25f5d7da781&w=1480",
+      "https://img.freepik.com/free-psd/vibrant-colorful-fresh-produce-delightful-healthy-eating_191095-90828.jpg?w=1480",
   },
   {
     name: "Baby & Pregnancy",
@@ -26,7 +28,7 @@ const categories = [
   {
     name: "Beverages",
     image:
-      "https://img.freepik.com/free-photo/beverages-set-wooden-board_140725-4463.jpg?t=st=1757065369~exp=1757068969~hmac=137b11e5deaee1e6512de955d1ce99e896311eb125c984de04e7ae3f98fe5758&w=1480",
+      "https://img.freepik.com/free-photo/beverages-set-wooden-board_140725-4463.jpg?w=1480",
   },
   {
     name: "Meats & Seafood",
@@ -59,7 +61,6 @@ const categories = [
   },
 ];
 
-// Top Products Data
 const topProducts = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
   name: `Top Product ${i + 1}`,
@@ -67,15 +68,14 @@ const topProducts = Array.from({ length: 8 }, (_, i) => ({
   image: `https://rukminim2.flixcart.com/image/612/612/xif0q/sofa-bed/n/i/j/single-182-1-seater-blue-polyester-91-no-9-fl017-little-smile-original-imah8wgyjwwjgcpy.jpeg?q=70`,
 }));
 
-// Best Sellers Data
-const clothes = Array.from({ length: 20 }, (_, i) => ({
+const clothes = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
   name: `Clothes ${i + 1}`,
   price: "$29.99",
   image: `https://rukminim2.flixcart.com/image/300/300/xif0q/t-shirt/9/x/g/l-tmrpoloful-p36-tripr-original-imah9fqgbnvqgfdh.jpeg?q=90`,
 }));
 
-const grocery = Array.from({ length: 20 }, (_, i) => ({
+const grocery = Array.from({ length: 8 }, (_, i) => ({
   id: i + 1,
   name: `Grocery ${i + 1}`,
   price: "$9.99",
@@ -91,81 +91,101 @@ const HomePage = () => {
     setCurrent(current === banners.length - 1 ? 0 : current + 1);
 
   return (
-    <div className="w-full">
-      {/* Banner Carousel */}
-      <section className="relative w-full h-[80vh] pt-30 flex items-center justify-center text-center">
-        {/* Background Image */}
+    <div className="w-full pt-28">
+      {/* Hero Banner */}
+      <section className="relative w-full min-h-[60vh] sm:min-h-[70vh] lg:min-h-[80vh] flex items-center justify-center text-center">
         <img
-          src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=1600&q=80"
+          src={banners[current].image}
           alt="Hero Banner"
           className="absolute inset-0 w-full h-full object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-black/10 bg-opacity-50"></div>
-
-        {/* Content */}
-        <div className="relative  max-w-2xl mx-auto px-4 text-white">
-          <h1 className="text-4xl sm:text-5xl font-bold mb-4">
+        <div className="relative z-10 max-w-3xl mx-auto px-4 text-white">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-6 drop-shadow-lg">
             Welcome to Our Store
           </h1>
-          <p className="text-lg sm:text-xl mb-6">
+          <p className="text-base sm:text-lg lg:text-xl mb-8 text-gray-200">
             Discover the best products with unbeatable prices
           </p>
-          <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg font-semibold text-white transition">
-            Get Started
-          </button>
+          <Link className="px-6 sm:px-8 py-3 sm:py-4 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-white transition transform hover:scale-105">
+            Shop Now
+          </Link>
         </div>
+
+        {/* Arrows */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/50 rounded-full text-white hover:bg-purple-600 transition"
+        >
+          <ChevronLeft size={24} />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 p-2 sm:p-3 bg-black/50 rounded-full text-white hover:bg-purple-600 transition"
+        >
+          <ChevronRight size={24} />
+        </button>
       </section>
-      {/* Top Categories */}
-      <section className="my-12 px-6">
-        <h2 className="text-3xl font-bold mb-6">Top Categories</h2>
-        <div className="bg-white p-6 rounded-3xl  m-4">
-          <div className="flex overflow-x-auto scrollbar-hide space-x-6 py-4">
-            {categories.map((category, index) => (
-              <div
-                key={index}
-                className="flex-none hover:border-purple-500 flex flex-col items-center justify-center p-2 cursor-pointer transition-transform duration-300 hover:scale-105"
-              >
-                <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden mb-2 shadow-md">
-                  <img
-                    src={category.image}
-                    alt={category.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <p className="text-sm sm:text-base text-gray-700 font-medium text-center whitespace-nowrap">
-                  {category.name}
-                </p>
+
+      {/* Categories */}
+      <section className="my-16 px-4 sm:px-6">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-gray-800 text-center">
+          Shop by Category
+        </h2>
+        <div className="flex overflow-x-auto scrollbar-hide space-x-4 sm:space-x-6 py-4 md:justify-center">
+          {categories.map((category, index) => (
+            <div
+              key={index}
+              className="flex-none flex flex-col items-center cursor-pointer transition transform hover:scale-105"
+            >
+              <div className="relative w-20 h-20 sm:w-28 sm:h-28 rounded-full overflow-hidden shadow-lg ring-2 ring-purple-500/50 hover:ring-purple-600">
+                <img
+                  src={category.image}
+                  alt={category.name}
+                  className="w-full h-full object-cover"
+                />
               </div>
-            ))}
-          </div>
+              <p className="mt-2 text-xs sm:text-sm font-medium text-gray-700 text-center">
+                {category.name}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Top Products */}
-      <section className="my-12 px-6">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-3xl font-bold">Top Products</h2>
-          <button className="text-red-500 font-semibold hover:underline">
-            See More
+      <section className="my-16 px-4 sm:px-6">
+        <div className="flex justify-between items-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            Top Products
+          </h2>
+          <button className="text-purple-600 font-semibold hover:underline text-sm sm:text-base">
+            View All
           </button>
         </div>
-        <div className="flex gap-6 overflow-x-auto scrollbar-hide snap-x snap-mandatory pb-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {topProducts.map((product) => (
             <Link
               to={`/products-details/${product.id}`}
               key={product.id}
-              className="min-w-[250px] sm:min-w-[280px] bg-white shadow rounded-lg overflow-hidden hover:shadow-lg transition snap-center"
+              className="bg-white rounded-xl shadow hover:shadow-xl transition overflow-hidden group flex flex-col"
             >
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-56 object-cover"
+                className="w-full h-40 sm:h-48 object-cover group-hover:scale-105 transition-transform"
               />
-              <div className="p-4">
-                <h3 className="font-semibold mb-2">{product.name}</h3>
-                <p className="text-red-500 font-bold">{product.price}</p>
+              <div className="p-3 sm:p-4 flex flex-col flex-1">
+                <h3 className="font-semibold mb-1 text-gray-800 text-sm sm:text-base">
+                  {product.name}
+                </h3>
+                <p className="text-purple-600 font-bold mb-3">
+                  {product.price}
+                </p>
+                <button className="mt-auto bg-purple-500 text-white px-3 py-2 rounded-lg hover:bg-purple-600 transition text-sm">
+                  Add to Cart
+                </button>
               </div>
             </Link>
           ))}
@@ -173,45 +193,61 @@ const HomePage = () => {
       </section>
 
       {/* Best Sellers */}
-      <section className="my-12 px-6">
-        <h2 className="text-3xl font-bold mb-6">Best Sellers</h2>
+      <section className="my-16 px-4 sm:px-6">
+        <h2 className="text-2xl sm:text-3xl font-bold mb-8 text-gray-800">
+          Best Sellers
+        </h2>
 
         {/* Clothes */}
-        <h3 className="text-xl font-semibold mb-4">Clothes</h3>
-        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4">Clothes</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6 mb-12">
           {clothes.map((item) => (
             <Link
               to={`/products-details/${item.id}`}
               key={item.id}
-              className="min-w-[160px] bg-white p-2 rounded-lg shadow hover:shadow-lg transition snap-start"
+              className="bg-white p-3 rounded-xl shadow hover:shadow-lg transition group flex flex-col"
             >
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-full h-40 object-cover rounded"
+                className="w-full h-36 sm:h-40 object-cover rounded group-hover:scale-105 transition-transform"
               />
-              <h4 className="mt-2 font-semibold text-sm">{item.name}</h4>
-              <p className="text-red-500 font-bold">{item.price}</p>
+              <div className="flex flex-col flex-1">
+                <h4 className="mt-2 font-semibold text-sm text-gray-800">
+                  {item.name}
+                </h4>
+                <p className="text-purple-600 font-bold mb-3">{item.price}</p>
+                <button className="mt-auto bg-purple-500 text-white px-3 py-2 rounded-lg hover:bg-purple-600 transition text-sm">
+                  Add to Cart
+                </button>
+              </div>
             </Link>
           ))}
         </div>
 
         {/* Grocery */}
-        <h3 className="text-xl font-semibold mb-4">Grocery</h3>
-        <div className="flex gap-6 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100">
+        <h3 className="text-lg sm:text-xl font-semibold mb-4">Grocery</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
           {grocery.map((item) => (
             <Link
               to={`/products-details/${item.id}`}
               key={item.id}
-              className="min-w-[160px] bg-white p-2 rounded-lg shadow hover:shadow-lg transition snap-start"
+              className="bg-white p-3 rounded-xl shadow hover:shadow-lg transition group flex flex-col"
             >
               <img
                 src={item.image}
                 alt={item.name}
-                className="w-full h-40 object-cover rounded"
+                className="w-full h-36 sm:h-35 object-cover rounded group-hover:scale-105 transition-transform"
               />
-              <h4 className="mt-2 font-semibold text-sm">{item.name}</h4>
-              <p className="text-red-500 font-bold">{item.price}</p>
+              <div className="flex flex-col flex-1">
+                <h4 className="mt-2 font-semibold text-sm text-gray-800">
+                  {item.name}
+                </h4>
+                <p className="text-purple-600 font-bold mb-3">{item.price}</p>
+                <button className="mt-auto bg-purple-500 text-white px-3 py-2 rounded-lg hover:bg-purple-600 transition text-sm">
+                  Add to Cart
+                </button>
+              </div>
             </Link>
           ))}
         </div>
