@@ -72,103 +72,57 @@ const CheckoutPage = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-16">
           {/* Checkout Form */}
           <div className="bg-white p-6 md:p-8 rounded-lg shadow-md">
-            <button className="flex items-center text-gray-600 mb-6 hover:text-gray-900 transition-colors duration-200">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 mr-2"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 19l-7-7 7-7"
-                />
-              </svg>
-              Back
-            </button>
-
-            {/* Delivery Options */}
-            <div className="mb-8 space-y-4">
-              <label className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer transition-all duration-200 hover:bg-purple-50">
-                <input
-                  type="radio"
-                  name="delivery"
-                  value="delivery"
-                  checked={deliveryOption === "delivery"}
-                  onChange={() => setDeliveryOption("delivery")}
-                  className="form-radio text-purple-600 h-5 w-5 mr-3"
-                />
-                <div>
-                  <div className="font-semibold">
-                    Get it delivered in 30 minutes
-                  </div>
-                </div>
-              </label>
-              <label className="flex items-center p-4 border border-gray-200 rounded-lg cursor-pointer transition-all duration-200 hover:bg-purple-50">
-                <input
-                  type="radio"
-                  name="delivery"
-                  value="pickup"
-                  checked={deliveryOption === "pickup"}
-                  onChange={() => setDeliveryOption("pickup")}
-                  className="form-radio text-purple-600 h-5 w-5 mr-3"
-                />
-                <div>
-                  <div className="font-semibold">
-                    Pickup available in 3 stores near you
-                  </div>
-                </div>
-              </label>
-            </div>
-
             {/* Cart Items */}
             <h2 className="text-lg font-semibold mb-4">Your Cart</h2>
             <ul className="divide-y divide-gray-200 mb-6">
-              {orderItems.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between py-4"
-                >
-                  <div className="flex items-center gap-4">
-                    <img
-                      src={item.image }
-                      className="w-16 h-16 bg-gray-200 rounded object-cover flex items-center justify-center text-gray-500"
-                    />
-                    <div>
-                      <h3 className="font-semibold text-gray-800">
-                        {item.name}
-                      </h3>
-                      <p className="text-sm text-gray-500">
-                        ${item.price.toFixed(2)}
-                      </p>
-                      <div className="flex items-center gap-2 mt-2">
-                        <button
-                          onClick={() => decreaseQuantity(item.id)}
-                          className="px-2 py-1 border rounded text-gray-600 hover:bg-gray-200"
-                        >
-                          -
-                        </button>
-                        <span>{item.quantity}</span>
-                        <button
-                          onClick={() => increaseQuantity(item.id)}
-                          className="px-2 py-1 border rounded text-gray-600 hover:bg-gray-200"
-                        >
-                          +
-                        </button>
+              {orderItems ? (
+                <>
+                  {orderItems.map((item) => (
+                    <li
+                      key={item.id}
+                      className="flex items-center justify-between py-4"
+                    >
+                      <div className="flex items-center gap-4">
+                        <img
+                          src={item.image}
+                          className="w-16 h-16 bg-gray-200 rounded object-cover flex items-center justify-center text-gray-500"
+                        />
+                        <div>
+                          <h3 className="font-semibold text-gray-800">
+                            {item.name}
+                          </h3>
+                          <p className="text-sm text-gray-500">
+                            ${item.price.toFixed(2)}
+                          </p>
+                          <div className="flex items-center gap-2 mt-2">
+                            <button
+                              onClick={() => decreaseQuantity(item.id)}
+                              className="px-2 py-1 border rounded text-gray-600 hover:bg-gray-200"
+                            >
+                              -
+                            </button>
+                            <span>{item.quantity}</span>
+                            <button
+                              onClick={() => increaseQuantity(item.id)}
+                              className="px-2 py-1 border rounded text-gray-600 hover:bg-gray-200"
+                            >
+                              +
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => removeItem(item.id)}
-                    className="text-red-500 hover:text-red-600 text-sm font-semibold"
-                  >
-                    Remove
-                  </button>
-                </li>
-              ))}
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="text-red-500 hover:text-red-600 text-sm font-semibold"
+                      >
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </>
+              ) : (
+                <button>add Items</button>
+              )}
             </ul>
           </div>
           {/* Card Details Section */}
